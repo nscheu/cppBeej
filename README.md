@@ -10,3 +10,6 @@ Authors:
 Nicholas Scheuring
 Tejas Bala
 Sawyer Warden
+
+SDL Tutorial: lazyfoo.net/tutorials/SDL/index.php
+SDL Library: http://www.libsdl.org/index.php
