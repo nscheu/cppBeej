@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include "Piece.h"
 
 class GameState{
     public:
@@ -21,8 +22,8 @@ class GameState{
         GameState();
     private:
     /* The 8x8 game board */
-    std::vector< std::vector<int> > gameBoard_;
+    std::vector< Piece > gameBoard_;
     
 };
 
-#endif /* GameState_hpp */
+#endif /* GameState_h */

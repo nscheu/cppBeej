@@ -8,9 +8,7 @@
 
 #include "GameState.h"
 
-using namespace std;
 
 GameState::GameState(){
-    //vector<int> v (8, int);
-    //this->gameBoard_(Piece);
-};
+
+}

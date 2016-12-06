@@ -1,6 +1,13 @@
 #include <SDL2/SDL.h>
+#include <stdio.h>
+#include <iostream>
 #include <vector>
+#include <thread>         // std::this_thread::sleep_for
+#include <chrono>         // std::chrono::seconds
 #include "Piece.h"
+#include "GameState.h"
+
+
 
 using namespace std;
 
@@ -36,6 +43,10 @@ int main (int argc, char** argv)
     // Clear winow
     SDL_RenderClear( renderer );
     
+    
+    
+    // Create a Game State
+    GameState gameState;
     
     // Generate the game board UI
 
@@ -89,18 +100,23 @@ int main (int argc, char** argv)
             }
         }
         
-        if(event.type == SDL_MOUSEBUTTONDOWN)
+        if(event.type == SDL_MOUSEBUTTONUP)
         {
-            SDL_DestroyWindow(window);
-            SDL_Quit();
+            /* If the left button was pressed. */
+            if (event.button.button == SDL_BUTTON_LEFT){
+                int x, y;
+                SDL_GetMouseState(&x, &y);
+                std::cout << "x= " << x << " y=" << y << std::endl;
+                //std::this_thread::sleep_for (std::chrono::milliseconds(500));
+            }
         }
         
         
        
     }
     
-    //SDL_DestroyWindow(window);
-    //SDL_Quit();
+    SDL_DestroyWindow(window);
+    SDL_Quit();
     
     return EXIT_SUCCESS;
 }
