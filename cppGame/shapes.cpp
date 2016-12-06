@@ -65,6 +65,7 @@ int main (int argc, char** argv)
         for(int j = 0; j < 8; j++){
             rekts.push_back(makeNewRect(x, y, hXw, hXw));
             pieces.push_back(Piece(x, y));
+            gameState.addPiece(pieces.back());
             SDL_SetRenderDrawColor(renderer,
                                    pieces.back().getR(),
                                    pieces.back().getG(),
