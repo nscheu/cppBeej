@@ -36,38 +36,29 @@ int main (int argc, char** argv)
     // Clear winow
     SDL_RenderClear( renderer );
     
-    // Creat a rect at pos ( 50, 50 ) that's 50 pixels wide and 50 pixels high.
-    SDL_Rect r = makeNewRect(50, 50, 50, 50);
     
-    
-    // Set render color to blue ( rect will be rendered in this color )
-    //SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
-    
-    // Render rect
-    SDL_RenderFillRect( renderer, &r );
-    
-//    SDL_Rect a = makeNewRect(150, 50, 50, 50);
-//    SDL_Rect b = makeNewRect(250, 50, 50, 50);
-//    SDL_Rect c = makeNewRect(350, 250, 50, 50);
-//    SDL_Rect d = makeNewRect(450, 350, 50, 50);
+    // Generate the game board UI
 
     int hXw = 50;
     int incX = 60;
     int incY = 60;
-    int x = 50;
+    int x = 300;
     int y = 50;
+    // Vector of SDL Rectangles
     vector<SDL_Rect> rekts;
+    // Vector of Game Pieces
     vector<Piece> pieces;
-    int randomColor = 255;
+    
+    // Loops and populates the vectors of Rectangles, and Pieces
     for(int i = 0; i < 8; i++){
         for(int j = 0; j < 8; j++){
             rekts.push_back(makeNewRect(x, y, hXw, hXw));
             pieces.push_back(Piece(x, y));
             SDL_SetRenderDrawColor(renderer,
-                                   0,
                                    pieces.back().getR(),
                                    pieces.back().getG(),
-                                   pieces.back().getB() );
+                                   pieces.back().getB(),
+                                   255);
             SDL_RenderFillRect(renderer, &rekts.back());
             y += incY;
         }
@@ -75,24 +66,7 @@ int main (int argc, char** argv)
         y = 50;
     }
     
-    
-    
-    
-    // Set render color to blue ( rect will be rendered in this color )
-    SDL_SetRenderDrawColor( renderer, 0, 0, 255, 255 );
-    
-
-//    SDL_RenderFillRect(renderer, &a);
-//    SDL_SetRenderDrawColor( renderer, 0, 0, 255, 255 );
-//    SDL_RenderFillRect(renderer, &b);
-//    SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
-//    SDL_RenderFillRect(renderer, &c);
-//    SDL_SetRenderDrawColor( renderer, 0, 255, 255, 0 );
-//    SDL_RenderFillRect(renderer, &d);
-    
-    //SDL_SetRenderDrawColor( renderer, 0, 255, 0, 255 );
-    
-    // Render the rect to the screen
+    // Render the rects to the screen
     SDL_RenderPresent(renderer);
     
     

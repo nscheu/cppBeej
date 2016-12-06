@@ -7,6 +7,7 @@
 //
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <ctime>
 #include "Piece.h"
 
 using namespace std;
@@ -19,18 +20,19 @@ Piece::Piece(const int& ex, const int& why) {
 }
 
 void Piece::setColor() noexcept{
+    //srand(time(NULL));
     int randNum = rand() % 5 + 1;
     if(randNum == 1) {
-        Piece::color_ = make_tuple(0,0,0);
-    }
-    else if(randNum == 2) {
         Piece::color_ = make_tuple(255,0,0);
     }
+    else if(randNum == 2) {
+        Piece::color_ = make_tuple(0,255,0);
+    }
     else if(randNum == 3) {
-        Piece::color_ = make_tuple(255,255,0);
+        Piece::color_ = make_tuple(0,0,255);
     }
     else if(randNum == 4) {
-        Piece::color_ = make_tuple(0,255,0);
+        Piece::color_ = make_tuple(255,255,0);
     }
     else if(randNum == 5) {
         Piece::color_ = make_tuple(0,255,255);
