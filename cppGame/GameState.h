@@ -11,6 +11,7 @@
 
 #include <stdio.h>
 #include <vector>
+#include <set>
 #include "Piece.h"
 
 class GameState{
@@ -52,9 +53,51 @@ class GameState{
          * @return true if on piece, false else
          */
         bool wasThisPieceClicked(int x, int y, int x_piece, int y_piece);
+        /**
+         * Swap the two pieces
+         *
+         */
+        void swapPieces();
+        /**
+         * Calls the Swap function
+         *
+         */
+        void swapCaller();
+        /**
+         *  Scans the board for sets of 3
+         *
+         */
+        void scanForMatches();
+        /**
+         *  Scans the board for Vertical sets of 3
+         *
+         */
+        void  scanForVertMatches();
+        /**
+         *  Scans the board for Horizontal sets of 3
+         *
+         */
+        void  scanForHoriMatches();
+        /**
+         *  deletes matched pieces from the game board
+         *  [Does not actually delete them, rather resets 
+         *   the color to a new color]
+         */
+        void  deleteMatchedPieces();
+        /**
+         * Checks if two pieces color matches
+         * @return true if match, false else
+         */
+        bool doPiecesMatch(int p1, int p2);
     private:
     /* The 8x8 game board */
     std::vector< Piece > gameBoard_;
+    /* The active tile */
+    int firstTile_;
+    /* The active tile */
+    int secondTile_;
+    /* Indexes of matched pieces */
+    std::set<int> matchedPieces_;
     
 };
 

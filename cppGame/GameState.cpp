@@ -11,6 +11,8 @@
 
 GameState::GameState(){
     std::cout << "Game State Constructor" << std::endl;
+    this->firstTile_ = -1;
+    this->secondTile_ = -1;
 }
 
 /**
@@ -26,9 +28,28 @@ GameState::GameState(){
  * @param y the mouse's y position
  */
 void GameState::catchXYfromClick(int x, int y){
-    std::cout << "GS CXY:: x= " << x << " y=" << y << std::endl;
     int pieceIndex = whichPieceWasClicked(x, y);
+    // If there is an active tile
+    if(this->firstTile_ >= 0){
+        //If the second tile exists already
+        if(this->secondTile_ >= 0){
+            // Then this piece is a new piece to swap
+            this->firstTile_ = pieceIndex;
+            this->secondTile_ = -1;
+        }
+        else{
+            //This choice is the second in a swap
+            this->secondTile_ = pieceIndex;
+            // DO the swap here
+            swapCaller();
+        }
+    }
+    else{
+        // This is the active tile
+        this->firstTile_ = pieceIndex;
+    }
     std::cout << "Piece Index:: " << pieceIndex << std::endl;
+    
 }
 
 /**
@@ -69,5 +90,145 @@ int GameState::whichPieceWasClicked(int x, int y){
  * @return true if on piece, false else
  */
 bool GameState::wasThisPieceClicked(int x, int y, int x_piece, int y_piece){
-    return (x_piece >= x && x_piece < x + 50 && y_piece <= y && x_piece > y - 50);
+    return (x >= x_piece && x < x_piece + 50 && y_piece <= y && y_piece > y - 50);
+}
+
+
+/**
+ * Swap the two pieces
+ *
+ */
+void GameState::swapPieces(){
+    Piece temp = this->gameBoard_[this->secondTile_];
+    this->gameBoard_[this->secondTile_] = this->gameBoard_[this->firstTile_];
+    this->gameBoard_[this->firstTile_] = temp;
+}
+
+
+/**
+ * Calls the Swap function
+ *
+ */
+void GameState::swapCaller(){
+    swapPieces();
+    scanForVertMatches();
+    scanForHoriMatches();
+    if(this->matchedPieces_.size() > 0){
+        deleteMatchedPieces();
+    }
+    else{
+        swapPieces();
+    }
+}
+
+/**
+ *  Scans the board for sets of 3
+ *
+ */
+void GameState::scanForMatches(){
+    scanForVertMatches();
+    scanForHoriMatches();
+    deleteMatchedPieces();
+}
+
+/**
+ *  Scans the board for Vertical sets of 3
+ *
+ */
+void  GameState::scanForVertMatches(){
+    int compTileIdx = 7;
+    int firstRange = -1;
+    int lastRange = -1;
+    
+    // Scan each column
+    for(int i = 0; i < 8; i++){
+        //set the column index
+        compTileIdx = (i * 8);
+        // Scan for column matches
+        for(int j = 7; j > 1; j--){
+            // Loop through the pieces above the start piece
+            for(int k = 6; k > -1; k--){
+                // If adjacent match not found
+                if(!this->doPiecesMatch(j + compTileIdx, k + compTileIdx)){
+                    // Set the last in the range to the last checked piece
+                    lastRange = k + compTileIdx + 1;
+                    // if (first item checked - last item checked) > 2 -> seq 3
+                    if((j + compTileIdx - lastRange) > 2){
+                        // Mark all in range for delete
+                        for(int l = lastRange; l >= (j + compTileIdx); l++){
+                            this->matchedPieces_.insert(l);
+                        }
+                    }
+                    // Reset j to not recheck the pieces marked for delete
+                    j = k + compTileIdx;
+                    // kill k loop
+                    k = -1;
+                }
+            }
+        }
+    }
+}
+/**
+ *  Scans the board for Horizontal sets of 3
+ *
+ */
+void  GameState::scanForHoriMatches(){
+    int firstRange = -1;
+    int lastRange = -1;
+    
+    //Loop through each row
+    for(int i = 0; i < 6; i++){
+        // i == the first index to compare
+        // loop through the rest of the row
+        for(int j = 0; j < 64; j += 8){
+            //loop through the rest of the row
+            for(int k = 8 + i; k <= (40 + i); i += 8){
+                // If adjacent match not found
+                if(!this->doPiecesMatch(j, k)){
+                    // Set the last in the range to the last checked piece
+                    lastRange = k - 8;
+                    // if (first item checked - last item checked) > 2 -> seq 3
+                    if((j - lastRange) > (2 * 8)){
+                        // Mark all in range for delete
+                        for(int l = lastRange; l >= j; l++){
+                            this->matchedPieces_.insert(l);
+                        }
+                    }
+                    // Reset j to not recheck the pieces marked for delete
+                    j = k;
+                    // kill k loop
+                    k = 99;
+                }
+            }
+        }
+    }
+}
+
+/**
+ *  deletes matched pieces from the game board
+ *  [Does not actually delete them, rather resets
+ *   the color to a new color]
+ */
+void  GameState::deleteMatchedPieces(){
+    
+    // Iterate the set of pieces to "delete"
+    for(auto f : this->matchedPieces_) {
+        // use f here
+        this->gameBoard_[f].setColor();
+    }
+    
+    // Clear the matched pieces set as they have been 'deleted'
+    this->matchedPieces_.clear();
+}
+
+
+/**
+ * Checks if two pieces color matches
+ * @return true if match, false else
+ */
+bool GameState::doPiecesMatch(int p1, int p2){
+    bool rMatch = this->gameBoard_[p1].getR() == this->gameBoard_[p2].getR();
+    bool gMatch = this->gameBoard_[p1].getG() == this->gameBoard_[p2].getG();
+    bool bMatch = this->gameBoard_[p1].getB() == this->gameBoard_[p2].getB();
+    return rMatch && gMatch && bMatch;
 }
