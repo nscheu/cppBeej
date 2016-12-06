@@ -88,6 +88,12 @@ int main (int argc, char** argv)
     bool running = true;
     SDL_Event event;
     
+    // Mouse Cursor Positions x, y
+    int x_mouse;
+    int y_mouse;
+    int x_old_mouse = 0;
+    int y_old_mouse = 0;
+    
     while(running)
     {
         while(SDL_PollEvent(&event))
@@ -100,13 +106,22 @@ int main (int argc, char** argv)
             }
         }
         
+        
         if(event.type == SDL_MOUSEBUTTONUP)
         {
             /* If the left button was pressed. */
             if (event.button.button == SDL_BUTTON_LEFT){
-                int x, y;
-                SDL_GetMouseState(&x, &y);
-                std::cout << "x= " << x << " y=" << y << std::endl;
+                SDL_GetMouseState(&x_mouse, &y_mouse);
+                //x_mouse = event.button.x;
+                //y_mouse = event.button.y;
+                if(x_mouse != x_old_mouse || y_mouse != y_old_mouse){
+                    //std::cout << "x= " << x_mouse << " y=" << y_mouse << std::endl;
+                    // Send Mouse Coords to Game State
+                    gameState.catchXYfromClick(x_mouse, y_mouse);
+                    x_old_mouse = x_mouse;
+                    y_old_mouse = y_mouse;
+                }
+                
                 //std::this_thread::sleep_for (std::chrono::milliseconds(500));
             }
         }

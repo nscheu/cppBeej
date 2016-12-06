@@ -20,6 +20,17 @@ class GameState{
          *
          */
         GameState();
+        /**
+         * Collects the mouse cursor location
+         * @param x the mouse's x position
+         * @param y the mouse's y position
+         */
+        void catchXYfromClick(int x, int y);
+        /**
+         * Adds a piece to the game state
+         * @param piece the piece
+         */
+        void addPiece(Piece piece);
     private:
     /* The 8x8 game board */
     std::vector< Piece > gameBoard_;
