@@ -31,15 +31,18 @@ void GameState::catchXYfromClick(int x, int y){
     int pieceIndex = whichPieceWasClicked(x, y);
     // If there is an active tile
     if(this->firstTile_ >= 0){
+        std::cout << "fol 1 " << this->firstTile_ << " " << this->secondTile_ << std::endl;
         //If the second tile exists already
         if(this->secondTile_ >= 0){
             // Then this piece is a new piece to swap
             this->firstTile_ = pieceIndex;
             this->secondTile_ = -1;
+            std::cout << "fol 2 " << this->firstTile_ << " " << this->secondTile_ << std::endl;
         }
         else{
             //This choice is the second in a swap
             this->secondTile_ = pieceIndex;
+            std::cout << "fol 3 " << this->firstTile_ << " " << this->secondTile_ << std::endl;
             // DO the swap here
             swapCaller();
         }
@@ -74,7 +77,7 @@ int GameState::whichPieceWasClicked(int x, int y){
         if(wasThisPieceClicked(x,y,
                                this->gameBoard_[i].getX(),
                                this->gameBoard_[i].getY())){
-            std::cout << "Clicke:: x= " << x << " y=" << y << "p-x" << this->gameBoard_[i].getX() << "p-y" <<this->gameBoard_[i].getY() << std::endl;
+            //std::cout << "Clicke:: x= " << x << " y=" << y << "p-x" << this->gameBoard_[i].getX() << "p-y" <<this->gameBoard_[i].getY() << std::endl;
             returnVal = i;
             std::cout << "A Piece Was Clicke at index : " << i << std::endl;
             break;
@@ -142,14 +145,18 @@ void  GameState::scanForVertMatches(){
     
     // Scan each column
     for(int i = 0; i < 8; i++){
+        std::cout << i << " i" << std::endl;
         //set the column index
         compTileIdx = (i * 8);
         // Scan for column matches
         for(int j = 7; j > 1; j--){
+            std::cout << j << " j" << std::endl;
             // Loop through the pieces above the start piece
             for(int k = 6; k > -1; k--){
+                std::cout << k << " k" << std::endl;
                 // If adjacent match not found
                 if(!this->doPiecesMatch(j + compTileIdx, k + compTileIdx)){
+                    std::cout << k << " match not found" << std::endl;
                     // Set the last in the range to the last checked piece
                     lastRange = k + compTileIdx + 1;
                     // if (first item checked - last item checked) > 2 -> seq 3
@@ -160,7 +167,9 @@ void  GameState::scanForVertMatches(){
                         }
                     }
                     // Reset j to not recheck the pieces marked for delete
-                    j = k + compTileIdx;
+                    //std::cout << j << " j was" << std::endl;
+                    //j = k + compTileIdx;
+                    //std::cout << j << " j is" << std::endl;
                     // kill k loop
                     k = -1;
                 }
@@ -195,7 +204,7 @@ void  GameState::scanForHoriMatches(){
                         }
                     }
                     // Reset j to not recheck the pieces marked for delete
-                    j = k;
+                    //j = k;
                     // kill k loop
                     k = 99;
                 }
